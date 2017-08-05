@@ -1,10 +1,6 @@
 # Raspberry Pi Setup Guide
 
-A really opionionated guide how to setup every version of a Raspberry Pi with Arch Linux including WiringPi, NTP, Wi-Fi, SSH,
-Ruby, ZSH and more.
-
-Take a look into the wiki for more interesing stuff like finding out your Raspberry Pi version.
-
+A really opionionated guide how to setup every version of a Raspberry Pi with Arch Linux including Wi-Fi, SSH, Hotspot and more.
 
 ## Some words regarding the hardware
 
@@ -44,35 +40,25 @@ SD card into the slot.
 
 ### 1.2. Download the image from the website
 
-There are 2 major versions of Raspberry Pi now. You may find the downloads on
-[www.archlinuxarm.org](http://www.archlinuxarm.org) for the latest version of Arch Linux for Raspberry Pi both 1 and 2.
-
-
-**For Raspberry Pi 2**
+**For Raspberry Pi 3**
 
 ```bash
-wget http://archlinuxarm.org/os/ArchLinuxARM-rpi-2-latest.tar.gz
-sudo tar -xpf ArchLinuxARM-rpi-2-latest.tar.gz -C root
+wget http://os.archlinuxarm.org/os/ArchLinuxARM-rpi-latest.tar.gz
+bsdtar -xpf ArchLinuxARM-rpi-latest.tar.gz -C root
 sync
 ```
 
-
-**For Raspberry Pi 1**
-
-```bash
-wget http://archlinuxarm.org/os/ArchLinuxARM-rpi-latest.tar.gz
-sudo tar -xpf ArchLinuxARM-rpi-latest.tar.gz -C root
-sync
-```
-
-
-### 1.3. Write the files onto the SD Card
+### 1.3. Move boot files to the first partition:
 
 ```bash
-sudo mv root/boot/* boot/
-sudo umount boot root
+mv root/boot/* boot
 ```
 
+### Unmount the two partitions:
+
+```bash
+umount boot root
+```
 
 ### 1.4. Put the SD Card into your pi, power it on and login with `alarm`/`alarm`
 
@@ -96,12 +82,9 @@ The password is `root`.
 Of course just if you want to have a german keyboard layout. You may skip this step or use another layout.
 
 ```bash
-loadkeys de
-echo LANG=de_DE.UTF-8 > /etc/locale.conf
-echo KEYMAP=de-latin1-nodeadkeys > /etc/vconsole.conf
+echo LANG=en_US.UTF-8 > /etc/locale.conf
 rm /etc/localtime
-ln -s /usr/share/zoneinfo/Europe/Berlin /etc/localtime
-sed -i "s/en_US.UTF-8/#en_US.UTF-8/" /etc/locale.conf
+ln -s /usr/share/zoneinfo/Asia/Jakarta /etc/localtime
 ```
 
 ```bash
@@ -133,12 +116,7 @@ echo 'vm.swappiness=1' > /etc/sysctl.d/99-sysctl.conf
 
 ```bash
 timedatectl set-local-rtc 0
-
-nano /etc/timezone
 ```
-
-* Set to "Europe/Berlin"
-
 
 ## 3. Update system and enable NTP
 ### 3.1. Tweak pacman
@@ -190,7 +168,7 @@ hostnamectl set-hostname your-hostname
 ### 4.3. sudo & user
 
 ```bash
-pacman -S sudo vim
+pacman -S sudo
 visudo
 ```
 
@@ -200,16 +178,16 @@ visudo
 %wheel ALL=(ALL) ALL
 ```
 
-* Add a new user (replace `yourUserName` with your username!)
+* Add a new user
 
 ```bash
-useradd -d /home/yourUserName -m -G wheel,rvm -s /bin/bash yourUserName
+useradd -d /home/gpa -m -G wheel -s /bin/bash gpa
 ```
 
 * Set a password for your new user:
 
 ```bash
-passwd yourUserName
+passwd gpa
 ```
 
 * Log out and log in with our newly created user
@@ -224,7 +202,7 @@ sudo userdel alarm
 ### 4.4. Additional software
 
 ```bash
-sudo pacman -S --needed nfs-utils htop openssh autofs alsa-utils alsa-firmware alsa-lib alsa-plugins git zsh wget base-devel diffutils libnewt dialog wpa_supplicant wireless_tools iw crda lshw
+sudo pacman -S --needed nfs-utils htop openssh git wget base-devel dialog wpa_supplicant wireless_tools iw vim usb_modeswitch raspberrypi-firmware ppp polkit create_ap
 ```
 
 
@@ -243,13 +221,6 @@ makepkg -si
 
 cd ../
 rm -rf package-query/ package-query.tar.gz yaourt/ yaourt.tar.gz
-```
-
-
-### 4.5 vcgencmd and other vc tools
-
-```bash
-sudo vim /etc/profile
 ```
 
 Change the line saying `PATH=`:
@@ -280,20 +251,6 @@ gpio readall
 
 * The last both command should give an `ok` or something similar. If not, something may be broken.
 
-
-
-## 5. Sound
-
-This is just for Raspberry Pi 1.
-
-Set the output device
-
-```bash
-sudo amixer cset numid=3 1
-```
-
-
-
 ## 6. Raspberry Pi overclocking
 
 You may want to overclock the Pi. And you won't even lose the guarantee for your pi, if you use the "offical"
@@ -316,29 +273,6 @@ sudo wifi-menu -o
 netctl start yourWifiSSID
 netctl enable yourWifiSSID
 ```
-
-
-## 9. Ruby
-
-```bash
-\curl -sSL https://get.rvm.io | sudo bash -s stable
-sudo usermod -aG rvm yourUser
-rvm reload
-rvm install ruby
-rvm list
-rvm alias create default ruby-2.3.0 # Or something else depending on what rvm list says
-gem install bundler rake
-```
-
-
-## 10. ZSH and dotfiles
-
-If you want to use ZSH
-```bash
-sudo usermod -s /usr/bin/zsh
-```
-
-Additionally you may want to clone and setup your personal dotfiles.
 
 * Logout and login back again or just reboot the pi
 
