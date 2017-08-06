@@ -204,6 +204,10 @@ sudo userdel alarm
 ```bash
 sudo pacman -S --needed nfs-utils htop openssh git wget base-devel dialog wpa_supplicant wireless_tools iw vim usb_modeswitch raspberrypi-firmware ppp polkit create_ap
 ```
+### Phreaking software
+```bash
+sudo pacman -S corkscrew badvpn httping sshpass openvpn python2
+```
 
 ### 4.5 Get Hilink Modems working
 
