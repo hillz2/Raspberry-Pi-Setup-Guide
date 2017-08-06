@@ -205,6 +205,12 @@ sudo userdel alarm
 sudo pacman -S --needed nfs-utils htop openssh git wget base-devel dialog wpa_supplicant wireless_tools iw vim usb_modeswitch raspberrypi-firmware ppp polkit create_ap
 ```
 
+### 4.5 Get Hilink Modems working
+
+```bash
+systemctl enable dhcpcd.service
+systemctl start dhcpcd.service
+```
 
 * Install yaourt:
 
