@@ -238,7 +238,8 @@ rm -rf package-query/ package-query.tar.gz yaourt/ yaourt.tar.gz
 wget -P /tmp/ http://www.daveconroy.com/wp3/wp-content/uploads/2013/07/hostapd.zip
 unzip /tmp/hostapd.zip 
 mv /usr/sbin/hostapd /usr/sbin/hostapd.default
-mv /tmp/hostapd /usr/sbin/hostapd
+cp /tmp/hostapd /usr/sbin/hostapd
+mv /tmp/hostapd /usr/bin/hostapd.tp-link
 chmod 755 /usr/sbin/hostapd
 ```
 
