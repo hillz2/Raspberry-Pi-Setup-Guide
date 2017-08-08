@@ -233,6 +233,15 @@ cd ../
 rm -rf package-query/ package-query.tar.gz yaourt/ yaourt.tar.gz
 ```
 
+* Replace hostapd with a modified binary for TP-Link WN725N
+```bash
+wget -P /tmp/ http://www.daveconroy.com/wp3/wp-content/uploads/2013/07/hostapd.zip
+unzip /tmp/hostapd.zip 
+mv /usr/sbin/hostapd /usr/sbin/hostapd.default
+mv /tmp/hostapd /usr/sbin/hostapd
+chmod 755 /usr/sbin/hostapd
+```
+
 Change the line saying `PATH=`:
 
 ```bash
